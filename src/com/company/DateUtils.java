@@ -108,7 +108,7 @@ public class DateUtils {
         LocalDateTime toDateTime = LocalDateTime.ofInstant(toDate.toInstant(), zoneId);
 
         long toMillis = Duration.between(fromDateTime, toDateTime).toMillis();
-        if (toMillis < 0) {
+        if (toMillis <= 0) {
             return "请检查时间参数是否正确！";
         }
 
@@ -129,9 +129,6 @@ public class DateUtils {
         int years = resutlTimestampDto.getYears();
         int months = resutlTimestampDto.getMonths();
         int days = resutlTimestampDto.getDays();
-        int hours = resutlTimestampDto.getHours();
-        int minutes = resutlTimestampDto.getMinutes();
-//        int seconds = resutlTimestampDto.getSeconds();
         //患者最终年龄
         StringBuilder patientAge = new StringBuilder();
         //时间节点
@@ -167,13 +164,12 @@ public class DateUtils {
             //小于1个月而又大于等于72小时的(3天)，用天表示
             patientAge.append(days).append("天");
         } else if (years == 0 && months == 0 && days < ageNode.getDayNode()) {
+            long toHours = Duration.between(fromDateTime, toDateTime).toHours();
             //小于72小时的，用小时表示。
-            if (hours >= 1) {
-                patientAge.append(hours).append("小时");
-            } else if (hours == 0 && minutes > 0) {
+            if (toHours < 1) {
                 patientAge.append("不足一小时");
             } else {
-                return "出生日期或当前日期有问题！";
+                patientAge.append(toHours).append("小时");
             }
         }
         return patientAge.toString();
