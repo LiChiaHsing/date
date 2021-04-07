@@ -167,7 +167,8 @@ public class DateUtils {
             long toHours = Duration.between(fromDateTime, toDateTime).toHours();
             //小于72小时的，用小时表示。
             if (toHours < 1) {
-                patientAge.append("不足一小时");
+//                patientAge.append("不足一小时");
+                patientAge.append(0).append("小时");
             } else {
                 patientAge.append(toHours).append("小时");
             }
