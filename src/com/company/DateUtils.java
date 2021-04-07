@@ -216,7 +216,7 @@ public class DateUtils {
         int daysResult = result.getDays();
         if (daysResult <0) {
             result.setMonths(result.getMonths() - 1);
-            int daysOfMonth = getDaysOfMonth(toTimestampDto.getYears(), toTimestampDto.getMonths());
+            int daysOfMonth = getDaysOfMonth(toTimestampDto.getYears(), toTimestampDto.getMonths() -1);
             result.setDays(daysResult + daysOfMonth);
         }
 
@@ -233,6 +233,7 @@ public class DateUtils {
     private static int getDaysOfMonth (int year, int month) {
         int result = 0;
         switch (month) {
+            case 0:
             case 1:
             case 3:
             case 5:
