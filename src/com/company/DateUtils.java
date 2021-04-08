@@ -109,6 +109,7 @@ public class DateUtils {
 
         //年月日时分秒分别做差，不够减的借位，秒去分借，分去小时借，小时去天借，天去月借以此类推
         int secondsResult = result.getSeconds();
+        //秒不够减，去分钟借位，分钟减1
         if (secondsResult < 0) {
             result.setMinutes(result.getMinutes() - 1);
             result.setSeconds(secondsResult + 60);
@@ -120,12 +121,14 @@ public class DateUtils {
             result.setMinutes(minutesResult + 60);
         }
 
+        //小时不够减，去天借位，借来24小时，天减一
         int hoursResult = result.getHours();
         if (hoursResult < 0) {
             result.setDays(result.getDays() - 1);
             result.setHours(hoursResult + 24);
         }
 
+        //天不够减去月借位，借当前月份上个月的天数
         int daysResult = result.getDays();
         if (daysResult <0) {
             result.setMonths(result.getMonths() - 1);
@@ -133,6 +136,7 @@ public class DateUtils {
             result.setDays(daysResult + daysOfMonth);
         }
 
+        //一共有12个月，减为0或者负数加12，为月份的真实值
         int monthsResult = result.getMonths();
         if (monthsResult < 0) {
             result.setYears(result.getYears() - 1);
