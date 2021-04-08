@@ -24,6 +24,7 @@ public class DateUtils {
             return "请检查时间参数是否正确！";
         }
 
+        //将年月日时分秒拆分，赋值给做差用的时间对象
         TimestampDto fromTimestampDto =
                 new TimestampDto(fromDateTime.getYear(), fromDateTime.getMonthValue(),
                         fromDateTime.getDayOfMonth(), fromDateTime.getHour(),
@@ -79,7 +80,6 @@ public class DateUtils {
             long toHours = Duration.between(fromDateTime, toDateTime).toHours();
             //小于72小时的，用小时表示。
             if (toHours < 1) {
-//                patientAge.append("不足一小时");
                 patientAge.append(0).append("小时");
             } else {
                 patientAge.append(toHours).append("小时");
@@ -107,6 +107,7 @@ public class DateUtils {
         result.setMonths(monthsSub);
         result.setYears(yearsSub);
 
+        //年月日时分秒分别做差，不够减的借位，秒去分借，分去小时借，小时去天借，天去月借以此类推
         int secondsResult = result.getSeconds();
         if (secondsResult < 0) {
             result.setMinutes(result.getMinutes() - 1);
