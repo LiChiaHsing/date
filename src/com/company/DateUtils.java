@@ -5,100 +5,12 @@ import com.company.domain.DateParams;
 import com.company.domain.TimestampDto;
 
 import java.time.*;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 /**
  * @author lijiaxing
  */
 public class DateUtils {
-    public static String calculateTimeDifference (DateParams request) {
-        Date startDate = request.getBirthDate();
-        Date endDate = request.getNowDate();
-        
-        if (null == startDate || null == endDate) {
-            return "出生日期或当前日期不可为空！";
-        }
-        
-        ZoneId zoneId = ZoneId.systemDefault();
-        //出生日期
-        LocalDateTime fromDateTime = LocalDateTime.ofInstant(startDate.toInstant(), zoneId);
-        //当前日期
-        LocalDateTime toDateTime = LocalDateTime.ofInstant(endDate.toInstant(), zoneId);
-        //中间日期变量
-        LocalDateTime tempDateTime = LocalDateTime.from(fromDateTime);
-
-        //年份差
-        long years = tempDateTime.until(toDateTime, ChronoUnit.YEARS);
-        //中间变量增加年份差值，将中间日期变量变为当前同期同年份
-        tempDateTime = tempDateTime.plusYears(years);
-
-        //月份差
-        long months = tempDateTime.until(toDateTime, ChronoUnit.MONTHS);
-        //中间变量增加月份差值，中间日期变量为当前日期同月份
-        tempDateTime = tempDateTime.plusMonths(months);
-
-        //天数差
-        long days = tempDateTime.until(toDateTime, ChronoUnit.DAYS);
-        //中间变量增加天数差值，中间日期变量为当前日期同日期
-        tempDateTime = tempDateTime.plusDays(days);
-
-        long hours = tempDateTime.until(toDateTime, ChronoUnit.HOURS);
-        tempDateTime = tempDateTime.plusHours(hours);
-
-        long minutes = tempDateTime.until(toDateTime, ChronoUnit.MINUTES);
-        tempDateTime = tempDateTime.plusMinutes(minutes);
-
-//        long seconds = tempDateTime.until(toDateTime, ChronoUnit.SECONDS);
-
-        //患者最终年龄
-        StringBuilder patientAge = new StringBuilder();
-        //时间节点
-        AgeNode ageNode = new AgeNode();
-
-        /*
-         * 年龄大于等于3*12个月的，用岁表示；
-         * 小于3*12个月而又大于等于1*12个月的，用岁月表示；
-         * 小于12个月而又大于等于6个月的，用月表示；
-         * 小于6个月而又大于等于1个月的，用月天表示；
-         * 小于1个月而又大于等于72小时的(3天)，用天表示
-         * 小于72小时的，用小时表示。
-         */
-        if (years >= ageNode.getYearNodeEnd()) {
-            //年龄大于等于3*12个月的，用岁表示；
-            patientAge.append(years).append("岁");
-        } else if ((years >= ageNode.getYearNodeBegin()) && (years < ageNode.getYearNodeEnd())) {
-            //小于3*12个月而又大于等于1*12个月的，用岁月表示；
-            patientAge.append(years).append("岁");
-            if (months > 0) {
-                patientAge.append(months).append("月");
-            }
-        } else if ((years < ageNode.getYearNodeBegin()) && (months >= ageNode.getMouthNodeEnd())) {
-            //小于12个月而又大于等于6个月的，用月表示；
-            patientAge.append(months).append("月");
-        } else if ((months < ageNode.getMouthNodeEnd()) && (months >= ageNode.getMouthNodeBegin())) {
-            //小于6个月而又大于等于1个月的，用月天表示；
-            patientAge.append(months).append("月");
-            if (days > 0) {
-                patientAge.append(days).append("天");
-            }
-        } else if (months < ageNode.getMouthNodeBegin() && days >= ageNode.getDayNode()) {
-            //小于1个月而又大于等于72小时的(3天)，用天表示
-            patientAge.append(days).append("天");
-        } else if (years == 0 && months == 0 && days < ageNode.getDayNode()) {
-            //小于72小时的，用小时表示。
-            hours = Duration.between(fromDateTime, toDateTime).toHours();
-            if (hours >= 1) {
-                patientAge.append(hours).append("小时");
-            } else if (hours == 0 && minutes > 0) {
-                patientAge.append("不足一小时");
-            } else {
-                return "出生日期或当前日期有问题！";
-            }
-        }
-        return patientAge.toString();
-    }
-
     public static String timestampDifference (DateParams request) {
         Date fromDate = request.getBirthDate();
         Date toDate = request.getNowDate();
