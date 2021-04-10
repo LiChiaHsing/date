@@ -219,7 +219,7 @@ public class DateUtils {
         int daysResult = result.getDays();
         if (daysResult <0) {
             result.setMonths(result.getMonths() - 1);
-            int daysOfMonth = getDaysOfMonth(toTimestampDto.getYears(), toTimestampDto.getMonths());
+            int daysOfMonth = getDaysOfMonth(fromTimestampDto.getYears(), fromTimestampDto.getMonths());
             result.setDays(daysResult + daysOfMonth);
         }
 
